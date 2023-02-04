@@ -1,66 +1,55 @@
-import re
-import random
+"""
+FelipedelosH
+2023
 
-def clearText(user_input):
-    """
-    Erase a stranger characters of string
-    and return a vector with all words
-    ['str', 'str', ...]
-    """
-    clear_sms = re.split(r'\s|[,:;.?!-_]\s*', user_input.lower())
-    return clear_sms
+Chatbot By Loko
+"""
+from tkinter import *
+from Controller import *
 
-def get_response(user_input):
-    response = check_all_messages(clearText(user_input))
-    return response
+class Software:
+    def __init__(self) -> None:
+        self.controller = Controller()
+        self.display_h = 400
+        self.display_w = 360
+        self.screem = Tk()
+        self.canvas = Canvas(self.screem, height=self.display_h, width=self.display_w,  bg="gray20")
+        self.femputadoraIMG = PhotoImage(file=self.controller.getIMGRouteOfFempuradora())
+        self.lbl_name_femputadora = Label(self.canvas, text=self.controller.getNameFemputadora())
+        self.chat_historial_area = Text(self.canvas, width=42, height=16, fg="white", bg="gray20")
+        self.txt_user_entry = Entry(width=25, fg="white", bg="gray20")
+        self.txt_user_entry.bind('<Key>', self.enterText)
 
+        self.visualizeAndRun()
 
-def message_probability(clear_user_input, recognized_words, single_response=False, required_word=[]):
-    message_certrainty = 0
-    has_required_words = True
+    def visualizeAndRun(self):
+        self.screem.title("Chat with Femputadora")
+        self.screem.geometry(str(self.display_w)+"x"+str(self.display_h))
 
-    for w in clear_user_input:
-        if w in recognized_words:
-            message_certrainty = message_certrainty + 1
+        self.canvas.place(x=0, y=0)
+        self.canvas.create_image(10, 10, image=self.femputadoraIMG, anchor=NW)
+        self.lbl_name_femputadora.place(x=80, y=15)
+        self.chat_historial_area.place(x=10, y=70)
 
-    percentage = message_certrainty / len(recognized_words)
+        self.txt_user_entry.place(x=160, y=350)
+        
 
+        self.screem.mainloop()
 
-    for w in required_word:
-        if w not in clear_user_input:
-            has_required_words = False
-            break
+    def updateChatHistorial(self):
+        self.chat_historial_area.delete("1.0", "end")
+        self.chat_historial_area.insert(END, self.controller.chat_historial)
 
-    if has_required_words or single_response:
-        return percentage * 100
-    else:
-        return 0
-
-def check_all_messages(message):
-    highest_prob = {}
-
-    def response(bot_response, list_of_words, single_response = False, required_words = []):
-        nonlocal highest_prob
-        highest_prob[bot_response] = message_probability(message, list_of_words, single_response, required_words)
-
-    response('Hola', ['hola', 'hello', 'saludos', 'buenas'], single_response=True)
-    response('Estoy bien y tu?', ['como', 'estas', 'va', 'vas', 'sientes'], required_words=['como'])
-    response('Estamos en Risaralda Caldas en la Carrera segunda # 11 - 05', ['ubicados', 'direccion', 'donde', 'ubicacion'], single_response=True)
-    response('Siempre a la orden', ['gracias', 'te lo agradezco', 'thanks'], single_response=True)
+    def clearInputTxt(self):
+        self.txt_user_entry.delete(0, END)
 
 
+    def enterText(self, event):
+        if event.keysym == "Return":
+            self.controller.insert_user_input(self.txt_user_entry.get())
+            self.clearInputTxt()
 
-    best_match = max(highest_prob, key=highest_prob.get)
+        self.updateChatHistorial()
+        
 
-    if highest_prob[best_match] < 1:
-        return unknown()
-    else:
-        return best_match
-
-def unknown():
-    responses = ['Podrias Repetir?', 'No estoy seguro', 'No tengo esa información']
-    return responses[random.randint(0, len(responses)-1)]
-
-
-while True:
-    print("BOT: " + get_response(input('You : ')))
+s = Software()
