@@ -55,5 +55,5 @@ if the user need buy rice the sentence contain a word "rice".
 # Solution of model:
 
 
-Calculate a propabilite of sentence and the bisgest concidency return a string (def message_probability) all message_probability calculate into a vector in for loop (def check_all_messages) 
+Calculate a propability of sentence and the biggest concidency return a string (def message_probability) all message_probability calculate into a vector in for loop (def check_all_messages) 
 

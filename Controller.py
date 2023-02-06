@@ -67,14 +67,7 @@ class Controller:
         for i in path_questions:
             brute_data = self.rtnArcheveInfo(path_file+i)
             json_data = json.loads(brute_data)
-
-            _bot_response = json_data['bot_response']
-            _list_of_words = json_data['list_of_words']
-            _single_response = json_data['single_response']
-            _required_words = json_data['required_words']
-
-            q = Question(_bot_response, _list_of_words, _single_response, _required_words)
-
+            q = Question(**json_data)
             self.questions.append(q)
             
 
