@@ -1,0 +1,13 @@
+{
+    "bot_response" : "El articulo cuesta: $1000",
+    "list_of_words" : [
+        "cuanto",
+        "precio",
+        "costo",
+        "articulo"
+    ],
+    "single_response" : true,
+    "required_words" : [
+        "articulo"
+    ]
+}

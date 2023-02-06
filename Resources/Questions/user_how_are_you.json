@@ -1,0 +1,14 @@
+{
+    "bot_response" : "Estoy bien y tu?",
+    "list_of_words" : [
+        "como",
+        "estas",
+        "va",
+        "vas",
+        "sientes"
+    ],
+    "single_response" : false,
+    "required_words" : [
+        "como"
+    ]
+}

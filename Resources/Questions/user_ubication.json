@@ -1,0 +1,12 @@
+{
+    "bot_response" : "Estamos en Risaralda Caldas en la Carrera segunda # 11 - 05",
+    "list_of_words" : [
+        "ubicados",
+        "direccion",
+        "donde",
+        "ubicacion",
+        "lugar"
+    ],
+    "single_response" : true,
+    "required_words" : []
+}

@@ -1,0 +1,10 @@
+{
+    "bot_response" : "Siempre a la orden",
+    "list_of_words" : [
+        "gracias",
+        "te lo agradezco",
+        "thanks"
+    ],
+    "single_response" : true,
+    "required_words" : []
+}
