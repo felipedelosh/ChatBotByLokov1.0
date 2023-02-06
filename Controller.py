@@ -5,14 +5,21 @@ This is a Chatbot load controller
 
 """
 
-import os # To know path project}
+import os # To know path project
+from os import scandir
 import re
 import random
+from Question import *
+import json
 
 class Controller:
     def __init__(self) -> None:
         self.pathProject = str(os.path.dirname(os.path.abspath(__file__)))
+        # Load all Questions
+        self.questions = []
+        self._loadAllQuestions()
         self.chat_historial = ""
+        
 
 
     def getIMGRouteOfFempuradora(self):
@@ -25,6 +32,51 @@ class Controller:
         
 
         return "FEMPUTADORA"
+
+    def rtnArcheveInfo(self, path):
+        """
+        Read a file via path and return all write in there
+        """
+        info = None
+        try:
+            f = open(path, 'r', encoding="utf-8")
+            return f.read()
+        except:
+            return info
+
+    def rtnArchieveFilesNames(self):
+        """
+        Return all files names of data folder
+        """
+        try:
+            path = self.pathProject + "/Resources/Questions/"
+
+            filesNames = []
+            for i in scandir(path):
+                if i.is_file():
+                    if ".json" in i.name:
+                        filesNames.append(i.name)
+
+            return filesNames
+        except:
+            return None
+
+    def _loadAllQuestions(self):
+        path_questions = self.rtnArchieveFilesNames()
+        path_file = self.pathProject + "/Resources/Questions/"
+        for i in path_questions:
+            brute_data = self.rtnArcheveInfo(path_file+i)
+            json_data = json.loads(brute_data)
+
+            _bot_response = json_data['bot_response']
+            _list_of_words = json_data['list_of_words']
+            _single_response = json_data['single_response']
+            _required_words = json_data['required_words']
+
+            q = Question(_bot_response, _list_of_words, _single_response, _required_words)
+
+            self.questions.append(q)
+            
 
     def update_chat(self, user, txt):
         if self.chat_historial == "":
@@ -80,12 +132,8 @@ class Controller:
             nonlocal highest_prob
             highest_prob[bot_response] =  self.message_probability(message, list_of_words, single_response, required_words)
 
-        response('Hola', ['hola', 'hello', 'saludos', 'buenas'], single_response=True)
-        response('Estoy bien y tu?', ['como', 'estas', 'va', 'vas', 'sientes'], required_words=['como'])
-        response('Estamos en Risaralda Caldas en la Carrera segunda # 11 - 05', ['ubicados', 'direccion', 'donde', 'ubicacion'], single_response=True)
-        response('Siempre a la orden', ['gracias', 'te lo agradezco', 'thanks'], single_response=True)
-
-
+        for i in self.questions:
+            response(i.bot_response, i.list_of_words, i.single_response, i.required_words)
 
         best_match = max(highest_prob, key=highest_prob.get)
 
@@ -101,4 +149,3 @@ class Controller:
 
     def valitateInput(self, user_input):
         return str(user_input).strip() != ""
-    
